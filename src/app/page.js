@@ -1,6 +1,6 @@
 import Header from '../components/Header'
 import Scanner from '../components/Scanner'
-import Results from '../components/Header.jsx'
+import Results from '../components/Results'
 
 export default function Home() {
   return (
