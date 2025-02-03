@@ -7,10 +7,12 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4">
       <Header />
+
       <main className="py-8">
-        <Scanner />
-        <Results />
-        <BarcodeScannerComponent /> 
+
+      <BarcodeScannerComponent /> 
+      <Results />
+      
       </main>
     </div>
   )
