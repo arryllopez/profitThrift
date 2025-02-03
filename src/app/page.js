@@ -1,6 +1,7 @@
 import Header from '../components/Header'
 import Scanner from '../components/Scanner'
 import Results from '../components/Results'
+import BarcodeScannerComponent from '../components/barcodeScanner'
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <main className="py-8">
         <Scanner />
         <Results />
+        <BarcodeScannerComponent /> 
       </main>
     </div>
   )

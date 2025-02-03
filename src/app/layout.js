@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Thrift Scanner',
-  description: 'Scan thrifted items and get eBay prices instantly',
+  title: 'profitThrift',
+  description: 'Scan your antique and vintage items and find their rightful eBay market price!',
 }
 
 export default function RootLayout({ children }) {
