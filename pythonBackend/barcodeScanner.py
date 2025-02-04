@@ -1,29 +1,29 @@
-from flask import Flask, Response
-from flask_cors import CORS
+from flask import Flask, request, jsonify
 import cv2
+from pyzbar.pyzbar import decode
 
 app = Flask(__name__)
-CORS(app)  # Allow frontend to access backend
 
-# Open webcam
-camera = cv2.VideoCapture(0)
-
-def generate_frames():
+def scan_barcode():
+    cap = cv2.VideoCapture(0)
     while True:
-        success, frame = camera.read()
-        if not success:
+        ret, frame = cap.read()
+        if not ret:
             break
-        else:
-            # Encode the frame as JPEG
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            # Yield frame as an HTTP response
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        barcodes = decode(frame)
+        for barcode in barcodes:
+            barcode_data = barcode.data.decode("utf-8")
+            cap.release()
+            cv2.destroyAllWindows()
+            return barcode_data
+
+@app.route('/scan', methods=['GET'])
+def scan():
+    barcode_info = scan_barcode()
+    return jsonify({"barcode": barcode_info})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
+
+

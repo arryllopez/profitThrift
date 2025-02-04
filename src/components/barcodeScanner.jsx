@@ -1,38 +1,33 @@
-"use client";
+import React, { useState } from "react";
+import Camera from "./Camera";
+import Results from "../components/Results";
 
-import React, { useState } from 'react';
-import { BarcodeScanner } from 'react-barcode-scanner'; // Correct import
-import "react-barcode-scanner/polyfill"; // Polyfill for camera handling
 
-const BarcodeScannerComponent = () => {
-  const [scannedData, setScannedData] = useState("No barcode scanned yet"); // State to hold scanned data
+const BarcodeScanner = () => {
+    const [barcode, setBarcode] = useState("");
+    const [product, setProduct] = useState(null);
 
-  // Handle scanning result
-  const handleScan = (result) => {
-    if (result) {
-      setScannedData(result.text); // Update state with scanned barcode data
-    }
-  };
+    const scanBarcode = async () => {
+        const response = await fetch("http://localhost:5000/scan");
+        const data = await response.json();
+        setBarcode(data.barcode);
 
-  // Handle any errors during scanning
-  const handleError = (error) => {
-    console.error("Error scanning barcode: ", error);
-  };
+        const productResponse = await fetch(`http://localhost:5000/lookup?barcode=${data.barcode}`);
+        const productData = await productResponse.json();
+        setProduct(productData);
+    };
 
-  return (
-    <div>
-      <h2>Scan Barcode</h2>
-      {/* BarcodeScanner component */}
-      <BarcodeScanner
-        onUpdate={(err, result) => {
-          if (result) handleScan(result);  // If there's a result, handle it
-          if (err) handleError(err);  // If there's an error, handle it
-        }}
-      />
-      {/* Display scanned data */}
-      <p>Scanned Data: {scannedData}</p>
-    </div>
-  );
+    return (
+        <div>
+            <Camera />
+            <button onClick={scanBarcode}>Scan Barcode</button>
+            {barcode && <p>Scanned Barcode: {barcode}</p>}
+            {product && <pre>{JSON.stringify(product, null, 2)}</pre>}
+            <Results barcode = {barcode} product = {product} />
+        </div>
+
+       
+    );
 };
 
-export default BarcodeScannerComponent;
+export default BarcodeScanner;
