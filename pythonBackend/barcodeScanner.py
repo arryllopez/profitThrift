@@ -19,5 +19,5 @@ def scan_barcodes(image_path):
         
 # Example usage
 if __name__ == "__main__":
-    image_path = "path_to_your_image.png"  # Replace with your image path
+    image_path = r"C:\Users\arryl\Desktop\thrift-scanner\pythonBackend\barcodeImages\aGameOfThrones.jpg"
     scan_barcodes(image_path)
